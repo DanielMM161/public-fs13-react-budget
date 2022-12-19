@@ -4,4 +4,5 @@ export interface BudgetListProps {
     title: string
     budges: Budget[]
     onclick: () => void
+    extraInfo: string
 }

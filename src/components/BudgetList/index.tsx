@@ -1,22 +1,31 @@
-import React from "react"
 import { BudgetListProps } from "../../interfaces/BudgetListProps"
 import BudgetItem from "../BudgetItem"
+import ExtraInfo from "../ExtraInfo"
 import './index.css'
 
-const BudgetList = ({ title = "", budges = [], onclick}: BudgetListProps) => {
+const BudgetList = ({
+    title = "",
+    budges = [],
+    onclick,
+    extraInfo = ""
+}: BudgetListProps) => {
         
     return (
         <section className="container">
-            <section className="section-title">
-                <h3>{title}</h3>
-                <button onClick={() => onclick()}>Click me</button>
-            </section>
+            <div className="container-list">
+                <div className="section-title">
+                    <h3>{title}</h3>
+                    <button onClick={() => onclick()}>Click me</button>
+                </div>
+                
+                <div className="section-list">
+                    {
+                        budges.map((budge) => <BudgetItem {...budge} />)
+                    }
+                </div>
+            </div>
             
-            <section className="section-list">
-                {
-                    budges.map((budge) => <BudgetItem {...budge} />)
-                }
-            </section>
+            <ExtraInfo title={extraInfo} amount={300}/>
         </section>
     )
 }

@@ -1,17 +1,20 @@
-import React from "react"
 import { Budget } from "../../interfaces/Budget"
 import './index.css'
 
 
-const BudgetItem = (props: Budget) => {
+const BudgetItem = ({
+    amount,
+    source,
+    date
+ }: Budget) => {
     
     return (
         <div className="budget-item">
             <div className="budget-item-amount">
-                <p>{props.amount}</p>
-                 <p>{props.source}</p>
+                <p>${amount}</p>
+                 <p>{source}</p>
             </div>
-            <p>{props.date}</p>
+            <p>{date}</p>
         </div>
     )
 }
