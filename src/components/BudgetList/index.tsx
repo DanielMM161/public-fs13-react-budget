@@ -20,7 +20,7 @@ const BudgetList = ({
                 
                 <div className="section-list">
                     {
-                        budges.map((budge) => <BudgetItem {...budge} />)
+                        budges.map((budge, index) => <BudgetItem key={index} {...budge} />)
                     }
                 </div>
             </div>

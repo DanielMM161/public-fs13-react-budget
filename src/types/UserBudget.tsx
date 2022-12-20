@@ -1,5 +1,7 @@
+import { Budget } from "../interfaces/Budget"
+
 export type UserBudget = {
-    incomes: number
-    expenses: number
+    incomes: Budget[]
+    expenses: Budget[]
     savings: number
 }
