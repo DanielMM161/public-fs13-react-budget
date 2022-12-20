@@ -1,0 +1,19 @@
+.saving-container {
+    display: flex;
+    border: 1px solid;
+    flex-direction: column;
+    margin-bottom: 8px;
+}
+
+.current-saving {
+    display: flex;
+    justify-content: space-between;
+}
+
+.target {
+
+}
+
+.btn-transfer {
+
+}

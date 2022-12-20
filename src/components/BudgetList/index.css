@@ -1,6 +1,6 @@
 .container {
     width: 100%;
-   margin-bottom: 30px;
+    margin-bottom: 30px;
     display: flex;
 }
 
@@ -10,6 +10,7 @@
     flex-direction: column;
     width: 50%;
     border: 1px solid;
+    min-height: 200px;
     max-height: 400px;
  
 }
