@@ -1,4 +1,4 @@
-import { Budget } from "../../interfaces/Budget"
+import { IBudget } from "../../interfaces/Budget"
 import './index.css'
 
 
@@ -6,7 +6,7 @@ const BudgetItem = ({
     amount,
     source,
     date
- }: Budget) => {
+ }: IBudget) => {
     
     return (
         <div className="budget-item">

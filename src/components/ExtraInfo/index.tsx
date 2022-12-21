@@ -1,10 +1,14 @@
-import { InfoAmount } from "../../interfaces/InfoAmount"
 import './index.css'
+
+interface IInfoAmount {
+    title: string
+    amount: number
+}
 
 const ExtraInfo = ({
     title,
     amount
-}: InfoAmount) => {
+}: IInfoAmount) => {
     
     return (
         <div className="extra-info">

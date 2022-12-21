@@ -1,4 +1,4 @@
-export interface Budget {
+export interface IBudget {
     date: string
     source: string
     amount: number

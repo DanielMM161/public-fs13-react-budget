@@ -1,19 +1,18 @@
 import './index.css'
 
-interface SavingProps {
+interface ISaving {
     currentSaving: number
     target: number
     transferClick: () => void
-    setTarget: () => void
+    setTargetClick: () => void
 }
 
 const Saving = ({
     currentSaving,
     target,
     transferClick,
-    setTarget
-}: SavingProps) => {
-    
+    setTargetClick
+}: ISaving) => {
     
     return (
         <div className='saving-container'>
@@ -23,10 +22,9 @@ const Saving = ({
             </div>
             <div className='target'>Target: {target}</div>
             <button className='btn-transfer' onClick={transferClick}>Transfer to saving accounts</button>
-            <button className='btn-transfer' onClick={setTarget}>Add Target</button>
+            <button className='btn-transfer' onClick={setTargetClick}>Add Target</button>
         </div>
     )
-
 }
 
 export default Saving
