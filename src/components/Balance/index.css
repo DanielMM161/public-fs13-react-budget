@@ -1,0 +1,13 @@
+.balance-container {
+    border: 1px solid black;
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    justify-content: center;
+    align-items: center;
+    max-width: 500px;
+    width: 100%;
+}
+.balance-container p {
+    margin-bottom: 8px;
+}

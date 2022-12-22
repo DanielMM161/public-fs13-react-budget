@@ -9,35 +9,45 @@ import Savings from "../../components/Forms/Savings";
 import { IInputsValue } from "../../interfaces/InputsValue";
 import { IBudget } from "../../interfaces/Budget";
 import { FORM } from "../../utils/constants";
+import Balance from "../../components/Balance";
+import Transfer from "../../components/Forms/Transfer";
 
 export interface IUserBudget {
     incomes: IBudget[]
     expenses: IBudget[]
-    savings: number
 }
 
 const BudgetPage = () => {
 
     const [userBudget, setUserBudget] = useState<IUserBudget>({
         incomes: [{ date: "", source: "", amount: 0}],
-        expenses: [{ date: "", source: "", amount: 0}],
-        savings: 0
+        expenses: [{ date: "", source: "", amount: 0}]
     })
     const [showDialog, setShowDialog] = useState({
         titleDialog: "",
         form: FORM.NONE
     })
     const [target, setTarget] = useState(0)
+    const [transfer, setTransfer] = useState(0)
+    const [currentSaving, setCurrentSaving] = useState(0)
+    const [balance, setBalance] = useState(0)
     const [inputsValue, setInputsValue] = useState({})
     
     useEffect(() => {
-
+       
     }, []);
+    
+    function totalIncomes(): number {
+        return userBudget.incomes.reduce((a, v) => a + v.amount, 0)
+    }
+    
+    function totalExpenses(): number {
+        return userBudget.expenses.reduce((a, v) => a + v.amount, 0)
+    }
 
     
     function getBalance(): number {
-        return 0
-       // return userBudget.incomes - userBudget.expenses + userBudget.savings
+        return totalIncomes() - totalExpenses() - currentSaving
     }
 
     function handleSetShowDialog(formType: number, title: string) {
@@ -47,11 +57,11 @@ const BudgetPage = () => {
         })
     }
     
-    function submitForm(event: IInputsValue) { 
+    function submitForm(value: IInputsValue) { 
         const budget: IBudget = {
-            source: event.source ?? "",
-            amount: event.amount ?? 0,
-            date: event.date ?? ""
+            source: value.source ?? "",
+            amount: value.amount ?? 0,
+            date: value.date ?? ""
         }
         if (showDialog.form === FORM.INCOMES) {
             setUserBudget({
@@ -64,11 +74,22 @@ const BudgetPage = () => {
                 ...userBudget,
                 expenses: [...userBudget.expenses, budget]
             })
-            
+             setBalance(getBalance())
         } else if (showDialog.form === FORM.TARGET) {
-             setTarget(event.target ?? 0)
-        } else if (showDialog.form === FORM.TRANSFER) {
+            setTarget(value.target ?? 0)
             
+        } else if (showDialog.form === FORM.TRANSFER_SAVINGS) {
+            const transfer = (value.valueTransfer ?? 0)
+            const newBalance = balance - transfer
+            setBalance(newBalance)
+            setCurrentSaving(currentSaving + transfer)
+            
+        } else if (showDialog.form === FORM.TRANSFER_BALANCE) {
+            if ((value.valueTransfer ?? 0) < currentSaving) {
+                const newsaving = currentSaving - (value.valueTransfer ?? 0)
+                setCurrentSaving(newsaving)
+                setBalance(balance + newsaving)
+            }
         }
             
         // Close Dialog
@@ -87,14 +108,15 @@ const BudgetPage = () => {
                 >
                     <div className="container-info">
                         <Saving
-                            currentSaving={0}
+                            currentSaving={currentSaving}
                             target={target}
                             setTargetClick={() => handleSetShowDialog(FORM.TARGET, "Target")}
-                            transferClick={() => handleSetShowDialog(FORM.TRANSFER, "Transfer")}
+                            transferClick={() => handleSetShowDialog(FORM.TRANSFER_SAVINGS, "Transfer to Savings")}
+                            resetTargetClick={() => setTarget(0)}
                         />
                         <ExtraInfo
                             title="Total Incomes"
-                            amount={userBudget.incomes.reduce((a, v) => a + v.amount, 0)}
+                            amount={totalIncomes()}
                         />
                     </div>
                 </BudgetList>
@@ -108,10 +130,12 @@ const BudgetPage = () => {
                     <div className="container-info">
                         <ExtraInfo
                             title="Total Expenses"
-                            amount={userBudget.expenses.reduce((a, v) => a + v.amount, 0)}
+                            amount={totalExpenses()}
                         />
                     </div>
                 </BudgetList>
+                
+                <Balance balance={getBalance()} transferFromBalance={() => { handleSetShowDialog(FORM.TRANSFER_BALANCE, "Transfer to Balance")}} />
             </div>
             {(showDialog.form === FORM.INCOMES) || (showDialog.form === FORM.EXPENSES) ? 
                 <Dialog title={showDialog.titleDialog} closeDialog={() => handleSetShowDialog(FORM.NONE, "")}>
@@ -120,10 +144,17 @@ const BudgetPage = () => {
                 </Dialog>
             : ''}
             
-            {(showDialog.form === FORM.TARGET) || (showDialog.form === FORM.TRANSFER) ? 
+            {(showDialog.form === FORM.TARGET) ? 
                 <Dialog title={showDialog.titleDialog} closeDialog={() => handleSetShowDialog(FORM.NONE, "")}>
                     {/** TODO: Form Incomes */}
                     <Savings label={showDialog.titleDialog} submitForm={(value) => { submitForm(value)}}/>
+                </Dialog>
+            : ''}
+            
+            {(showDialog.form === FORM.TRANSFER_BALANCE) || (showDialog.form === FORM.TRANSFER_SAVINGS) ? 
+                <Dialog title={showDialog.titleDialog} closeDialog={() => handleSetShowDialog(FORM.NONE, "")}>
+                    {/** TODO: Form Incomes */}
+                    <Transfer submitForm={(value) => { submitForm(value)}}/>
                 </Dialog>
             : ''}
         </React.Fragment>

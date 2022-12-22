@@ -2,15 +2,15 @@ import React, { FormEventHandler, useState } from 'react'
 import { IInputsValue } from '../../interfaces/InputsValue'
 import './index.css'
 
-const Savings = ({ label, submitForm}: { label: string, submitForm: (value: IInputsValue) => void }) => {
+const Transfer = ({ submitForm }: { submitForm: (value: IInputsValue) => void }) => {
     
-    const [target, setTarget] = useState("")
+    const [valueTransfer, setValueTransfer] = useState("")
 
     function onSubmit(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault()
         if (submitForm) {
             const values: IInputsValue = {
-                target: Number(target),
+                valueTransfer: Number(valueTransfer),
             }
             submitForm(values);
         }
@@ -18,10 +18,10 @@ const Savings = ({ label, submitForm}: { label: string, submitForm: (value: IInp
     
     return (
         <form className="Form" onSubmit={onSubmit}>                           
-            <label className='label'>{label} Amount</label>
+            <label className='label'>Amount</label>
             <input
-                value={target}
-                onChange={(event) => setTarget(event.target.value)}
+                value={valueTransfer}
+                onChange={(event) => setValueTransfer(event.target.value)}
                 className='input'
                 type="number"
                 required
@@ -31,4 +31,4 @@ const Savings = ({ label, submitForm}: { label: string, submitForm: (value: IInp
     )
 }
 
-export default Savings
+export default Transfer
