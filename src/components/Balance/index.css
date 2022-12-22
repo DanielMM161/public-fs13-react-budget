@@ -7,6 +7,7 @@
     align-items: center;
     max-width: 500px;
     width: 100%;
+    background-color: var(--primary-color-cards);
 }
 .balance-container p {
     margin-bottom: 8px;

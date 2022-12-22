@@ -26,7 +26,7 @@ const Savings = ({ label, submitForm}: { label: string, submitForm: (value: IInp
                 type="number"
                 required
             />           
-            <button type='submit' >Accept</button>
+            <button className="button" type='submit' >Accept</button>
         </form>
     )
 }

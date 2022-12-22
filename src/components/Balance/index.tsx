@@ -11,11 +11,11 @@ const Balance = ({
 }: IBalance) => {
     
     return (
-        <div className='balance-container'>
+        <div className='balance-container card'>
             <h3>Current Balance</h3>
             <p>{balance}</p>
             
-            <button onClick={transferFromBalance}>Transfer to Balance</button>
+            <button className="button" onClick={transferFromBalance}>Transfer to Balance</button>
         </div>
 
     )

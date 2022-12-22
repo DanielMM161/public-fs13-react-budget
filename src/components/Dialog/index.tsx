@@ -21,7 +21,7 @@ const Dialog = ({
                     <div className="modal-content">
                         <div className="modal-header">
                             <h3>{title}</h3>
-                            <button className='btn-close' aria-label='Close' onClick={closeDialog}></button>
+                            <button className='close-icon' aria-label='Close' onClick={closeDialog}></button>
                         </div>
                         {children}
                     </div>

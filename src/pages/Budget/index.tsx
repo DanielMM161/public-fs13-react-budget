@@ -20,8 +20,8 @@ export interface IUserBudget {
 const BudgetPage = () => {
 
     const [userBudget, setUserBudget] = useState<IUserBudget>({
-        incomes: [{ date: "", source: "", amount: 0}],
-        expenses: [{ date: "", source: "", amount: 0}]
+        incomes: [],
+        expenses: []
     })
     const [showDialog, setShowDialog] = useState({
         titleDialog: "",

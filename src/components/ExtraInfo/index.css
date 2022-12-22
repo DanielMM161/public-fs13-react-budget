@@ -3,4 +3,5 @@
     border: 1px solid;
     max-height: 200px;
     padding: 10px;
+    background-color: var(--primary-color-cards);
 }

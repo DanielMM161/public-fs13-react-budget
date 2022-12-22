@@ -48,7 +48,7 @@ const Budget = ({ label, submitForm }: { label: string, submitForm: (value: IInp
                 type="date"
                 required
             />                     
-            <button type='submit' >Add {label}</button>
+            <button  className="button" type='submit' >Add {label}</button>
         </form>
     )
 }

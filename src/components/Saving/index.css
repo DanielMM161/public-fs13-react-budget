@@ -3,6 +3,9 @@
     border: 1px solid;
     flex-direction: column;
     margin-bottom: 8px;
+    padding: 1.5rem;
+    gap: 16px;
+    background-color: var(--primary-color-cards);   
 }
 
 .current-saving {
@@ -13,8 +16,4 @@
 .target {
     display: flex;
     justify-content: space-between;
-}
-
-.btn-transfer {
-
 }

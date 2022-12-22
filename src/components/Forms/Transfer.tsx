@@ -26,7 +26,7 @@ const Transfer = ({ submitForm }: { submitForm: (value: IInputsValue) => void })
                 type="number"
                 required
             />           
-            <button type='submit' >Accept</button>
+            <button className='button' type='submit' >Accept</button>
         </form>
     )
 }

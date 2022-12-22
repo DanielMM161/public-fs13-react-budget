@@ -11,7 +11,7 @@ const ExtraInfo = ({
 }: IInfoAmount) => {
     
     return (
-        <div className="extra-info">
+        <div className="extra-info card">
             <h3>{title}</h3>
             <h4>Amount: ${amount}</h4>
         </div>

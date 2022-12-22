@@ -17,15 +17,14 @@ const BudgetList = ({
     children
 }: IBudgetList) => {
     
-   // const amount = budges.reduce((acumulator, value) => acumulator + value.amount, 0)
-        
     return (
         <section className="container">
-            <div className="container-list">
+            <div className="container-list card">
                 <div className="section-title">
                     <h3>{title}</h3>
-                    <button onClick={() => onclick()}>Click me</button>
+                    <button className="add-icon" onClick={() => onclick()}></button>
                 </div>
+                <hr/>
                 
                 <div className="section-list">
                     {
