@@ -22,44 +22,52 @@ const BudgetPage = () => {
     const [incomes, setIncomes] = useState<IBudget[]>([])
     const [expenses, setExpenses] = useState<IBudget[]>([])
     const [target, setTarget] = useState(0)
-    const [transfer, setTransfer] = useState(0)
     const [currentSaving, setCurrentSaving] = useState(0)
     const [balance, setBalance] = useState(0)
-    const [showDialog, setShowDialog] = useState({
-        titleDialog: "",
-        form: FORM.NONE
-    })
+    const [showDialog, setShowDialog] = useState(
+        {
+            titleDialog: "",
+            form: FORM.NONE
+        }
+    )
 
     useEffect(() => {
+        setIncomes([
+            { date: "28-12-2022", source: "a", amount: 200 },
+            { date: "28-12-2022", source: "b", amount: 200 },
+            { date: "28-12-2022", source: "c", amount: 200 },
+            { date: "28-12-2022", source: "a", amount: 200 },
+            { date: "28-12-2022", source: "b", amount: 200 },
+            {date: "28-12-2022", source: "c", amount: 200}
+        ])
+        setExpenses([
+            { date: "28-12-2022", source: "a", amount: 200 },
+            { date: "28-12-2022", source: "b", amount: 200 },
+        ])
         
+        setBalance(getBalance())        
     }, []);
     
-    function totalIncomes(): number {
-        return incomes.reduce((a, v) => a + v.amount, 0)
-    }
-    
-    function totalExpenses(): number {
-        return expenses.reduce((a, v) => a + v.amount, 0)
+    function totalAmount(budget: IBudget[]): number {
+        return budget.reduce((a, v) => a + v.amount, 0)
     }
     
     function getBalance(): number {
-        return totalIncomes() - totalExpenses() - currentSaving
-    }
-
-    function handleSetShowDialog(formType: number, title: string) {
-        setShowDialog({
-            titleDialog: title,
-            form: formType
-        })
+        return totalAmount(incomes) - totalAmount(expenses) - currentSaving
     }
     
     function deleteMovement(
-        id: number,
+        index: number,
         movement: IBudget[],
         setState: React.Dispatch<React.SetStateAction<IBudget[]>>
     ) {       
-        movement.splice(id, 1)
-        setState([...movement])    
+        const prevState = JSON.stringify(movement)        
+        movement.splice(index, 1)
+        if (getBalance() >= 0) {
+            setState([...movement])
+        } else {
+            setState([...JSON.parse(prevState)])
+        }    
     }
     
     function submitForm(value: IInputsValue) { 
@@ -70,6 +78,7 @@ const BudgetPage = () => {
         }
         if (showDialog.form === FORM.INCOMES) {
             setIncomes([...incomes, budget])
+            setBalance(getBalance())
             
         } else if (showDialog.form === FORM.EXPENSES) {
             setExpenses([...expenses, budget])
@@ -80,12 +89,14 @@ const BudgetPage = () => {
             
         } else if (showDialog.form === FORM.TRANSFER_SAVINGS) {
             const transfer = (value.valueTransfer ?? 0)
-            const newBalance = balance - transfer
-            setBalance(newBalance)
-            setCurrentSaving(currentSaving + transfer)
+            const newBalance = getBalance() - transfer
+            if (newBalance >= 0) {
+                setBalance(newBalance)
+                setCurrentSaving(currentSaving + transfer)
+            }
             
         } else if (showDialog.form === FORM.TRANSFER_BALANCE) {
-            if ((value.valueTransfer ?? 0) < currentSaving) {
+            if ((value.valueTransfer ?? 0) <= currentSaving) {
                 const newsaving = currentSaving - (value.valueTransfer ?? 0)
                 setCurrentSaving(newsaving)
                 setBalance(balance + newsaving)
@@ -93,7 +104,7 @@ const BudgetPage = () => {
         }
             
         // Close Dialog
-        handleSetShowDialog(FORM.NONE,"")   
+        setShowDialog({titleDialog: "", form: FORM.NONE})
     }
     
     return (
@@ -105,7 +116,7 @@ const BudgetPage = () => {
                     title="Incomes"
                     budgets={incomes}
                     onClick={() => setShowDialog({titleDialog: "Incomes", form:FORM.INCOMES})}
-                    deleteItem={(id?: number) => deleteMovement(id ?? 0, incomes, setIncomes)}
+                    deleteItem={(index?: number) => deleteMovement(index ?? 0, incomes, setIncomes)}
                 >
                     <div className="container-info">
                         <Saving
@@ -117,7 +128,7 @@ const BudgetPage = () => {
                         />
                         <ExtraInfo
                             title="Total Incomes"
-                            amount={totalIncomes()}
+                            amount={totalAmount(incomes)}
                         />
                     </div>
                 </BudgetList>
@@ -132,7 +143,7 @@ const BudgetPage = () => {
                     <div className="container-info">
                         <ExtraInfo
                             title="Total Expenses"
-                            amount={totalExpenses()}
+                            amount={totalAmount(expenses)}
                         />
                     </div>
                 </BudgetList>
@@ -178,6 +189,7 @@ const BudgetPage = () => {
                     <Transfer submitForm={(value) => { submitForm(value)}}/>
                 </Dialog>
             : ''}
+            
         </React.Fragment>
     )
 }
