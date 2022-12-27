@@ -19,32 +19,28 @@ export interface IUserBudget {
 
 const BudgetPage = () => {
 
-    const [userBudget, setUserBudget] = useState<IUserBudget>({
-        incomes: [],
-        expenses: []
-    })
-    const [showDialog, setShowDialog] = useState({
-        titleDialog: "",
-        form: FORM.NONE
-    })
+    const [incomes, setIncomes] = useState<IBudget[]>([])
+    const [expenses, setExpenses] = useState<IBudget[]>([])
     const [target, setTarget] = useState(0)
     const [transfer, setTransfer] = useState(0)
     const [currentSaving, setCurrentSaving] = useState(0)
     const [balance, setBalance] = useState(0)
-    const [inputsValue, setInputsValue] = useState({})
-    
+    const [showDialog, setShowDialog] = useState({
+        titleDialog: "",
+        form: FORM.NONE
+    })
+
     useEffect(() => {
-       
+        
     }, []);
     
     function totalIncomes(): number {
-        return userBudget.incomes.reduce((a, v) => a + v.amount, 0)
+        return incomes.reduce((a, v) => a + v.amount, 0)
     }
     
     function totalExpenses(): number {
-        return userBudget.expenses.reduce((a, v) => a + v.amount, 0)
+        return expenses.reduce((a, v) => a + v.amount, 0)
     }
-
     
     function getBalance(): number {
         return totalIncomes() - totalExpenses() - currentSaving
@@ -57,6 +53,15 @@ const BudgetPage = () => {
         })
     }
     
+    function deleteMovement(
+        id: number,
+        movement: IBudget[],
+        setState: React.Dispatch<React.SetStateAction<IBudget[]>>
+    ) {       
+        movement.splice(id, 1)
+        setState([...movement])    
+    }
+    
     function submitForm(value: IInputsValue) { 
         const budget: IBudget = {
             source: value.source ?? "",
@@ -64,17 +69,12 @@ const BudgetPage = () => {
             date: value.date ?? ""
         }
         if (showDialog.form === FORM.INCOMES) {
-            setUserBudget({
-                ...userBudget,
-                incomes:  [...userBudget.incomes, budget]
-            })
+            setIncomes([...incomes, budget])
             
         } else if (showDialog.form === FORM.EXPENSES) {
-            setUserBudget({
-                ...userBudget,
-                expenses: [...userBudget.expenses, budget]
-            })
-             setBalance(getBalance())
+            setExpenses([...expenses, budget])
+            setBalance(getBalance())
+            
         } else if (showDialog.form === FORM.TARGET) {
             setTarget(value.target ?? 0)
             
@@ -103,15 +103,16 @@ const BudgetPage = () => {
                 {/* // Aqui va los incomes y cuando los incomes esten calculados aparece savings al lado en el mismo container */}
                 <BudgetList
                     title="Incomes"
-                    budgets={userBudget.incomes}
-                    onclick={() => handleSetShowDialog(FORM.INCOMES,  "Incomes")}
+                    budgets={incomes}
+                    onClick={() => setShowDialog({titleDialog: "Incomes", form:FORM.INCOMES})}
+                    deleteItem={(id?: number) => deleteMovement(id ?? 0, incomes, setIncomes)}
                 >
                     <div className="container-info">
                         <Saving
                             currentSaving={currentSaving}
                             target={target}
-                            setTargetClick={() => handleSetShowDialog(FORM.TARGET, "Target")}
-                            transferClick={() => handleSetShowDialog(FORM.TRANSFER_SAVINGS, "Transfer to Savings")}
+                            setTargetClick={() => setShowDialog({titleDialog: "Target",form: FORM.TARGET})}
+                            transferClick={() => setShowDialog({titleDialog: "Transfer to Savings", form: FORM.TRANSFER_SAVINGS})}
                             resetTargetClick={() => setTarget(0)}
                         />
                         <ExtraInfo
@@ -124,8 +125,9 @@ const BudgetPage = () => {
                 {/* Expenses con su total expense calculado */}
                 <BudgetList
                     title="Expenses"
-                    onclick={() => handleSetShowDialog(FORM.EXPENSES, "Expenses")}
-                    budgets={userBudget.expenses}
+                    onClick={() => setShowDialog({titleDialog: "Expenses", form: FORM.EXPENSES})}
+                    budgets={expenses}
+                    deleteItem={(id?: number) => deleteMovement(id ?? 0, expenses, setExpenses)}
                 >
                     <div className="container-info">
                         <ExtraInfo
@@ -135,25 +137,44 @@ const BudgetPage = () => {
                     </div>
                 </BudgetList>
                 
-                <Balance balance={getBalance()} transferFromBalance={() => { handleSetShowDialog(FORM.TRANSFER_BALANCE, "Transfer to Balance")}} />
+                <Balance
+                    balance={getBalance()}
+                    transferFromBalance={() =>
+                        {
+                            setShowDialog({titleDialog: "Transfer to Balance", form: FORM.TRANSFER_BALANCE})
+                        }
+                    }
+                />
             </div>
             {(showDialog.form === FORM.INCOMES) || (showDialog.form === FORM.EXPENSES) ? 
-                <Dialog title={showDialog.titleDialog} closeDialog={() => handleSetShowDialog(FORM.NONE, "")}>
-                    {/** TODO: Form Incomes */}
-                    <Budget label={showDialog.titleDialog} submitForm={(value) => {submitForm(value)}}/>
+                <Dialog
+                    title={showDialog.titleDialog}
+                    closeDialog={() => setShowDialog({ titleDialog: "", form: FORM.NONE })}
+                >
+                    <Budget
+                        label={showDialog.titleDialog}
+                        submitForm={(value) => { submitForm(value) }}
+                    />
                 </Dialog>
             : ''}
             
             {(showDialog.form === FORM.TARGET) ? 
-                <Dialog title={showDialog.titleDialog} closeDialog={() => handleSetShowDialog(FORM.NONE, "")}>
-                    {/** TODO: Form Incomes */}
-                    <Savings label={showDialog.titleDialog} submitForm={(value) => { submitForm(value)}}/>
+                <Dialog
+                    title={showDialog.titleDialog}
+                    closeDialog={() => setShowDialog({ titleDialog: "", form: FORM.NONE })}
+                >
+                    <Savings
+                        label={showDialog.titleDialog}
+                        submitForm={(value) => { submitForm(value) }}
+                    />
                 </Dialog>
             : ''}
             
             {(showDialog.form === FORM.TRANSFER_BALANCE) || (showDialog.form === FORM.TRANSFER_SAVINGS) ? 
-                <Dialog title={showDialog.titleDialog} closeDialog={() => handleSetShowDialog(FORM.NONE, "")}>
-                    {/** TODO: Form Incomes */}
+                <Dialog
+                    title={showDialog.titleDialog}
+                    closeDialog={() => setShowDialog({ titleDialog: "", form: FORM.NONE })}
+                >
                     <Transfer submitForm={(value) => { submitForm(value)}}/>
                 </Dialog>
             : ''}

@@ -5,16 +5,23 @@ import './index.css'
 const BudgetItem = ({
     amount,
     source,
-    date
- }: IBudget) => {
+    date,
+    deleteItem
+}: IBudget) => {
+    
     
     return (
         <div className="budget-item">
             <div className="budget-item-amount">
-                <p>${amount}</p>
-                 <p>{source}</p>
+                <p className="amount">${amount}</p>
+                <p className="source">{source}</p>
             </div>
-            <p>{date}</p>
+            <div className="budget-item-info">
+                <p>{date}</p>
+                <div className="icon-content" onClick={() => { if(deleteItem) deleteItem() }}>
+                    <i className="icon-trash"></i>
+                </div>
+            </div>
         </div>
     )
 }

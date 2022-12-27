@@ -93,6 +93,7 @@
 }
 
 .close-icon {
+    cursor: pointer;
     box-sizing: border-box;
     position: relative;
     display: block;
