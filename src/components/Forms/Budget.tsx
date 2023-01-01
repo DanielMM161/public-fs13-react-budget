@@ -1,8 +1,12 @@
 import React, { useState } from 'react'
+import { IForm } from '../../interfaces/Form'
 import { IInputsValue } from '../../interfaces/InputsValue'
 import './index.css'
 
-const Budget = ({ label, submitForm }: { label: string, submitForm: (value: IInputsValue) => void }) => {
+const Budget = ({
+    label,
+    submitForm
+}: IForm) => {
     
     const [source, setSource] = useState("")
     const [amount, setAmount] = useState("")

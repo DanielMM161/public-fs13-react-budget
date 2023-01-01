@@ -32,19 +32,6 @@ const BudgetPage = () => {
     )
 
     useEffect(() => {
-        setIncomes([
-            { date: "28-12-2022", source: "a", amount: 200 },
-            { date: "28-12-2022", source: "b", amount: 200 },
-            { date: "28-12-2022", source: "c", amount: 200 },
-            { date: "28-12-2022", source: "a", amount: 200 },
-            { date: "28-12-2022", source: "b", amount: 200 },
-            {date: "28-12-2022", source: "c", amount: 200}
-        ])
-        setExpenses([
-            { date: "28-12-2022", source: "a", amount: 200 },
-            { date: "28-12-2022", source: "b", amount: 200 },
-        ])
-        
         setBalance(getBalance())        
     }, []);
     
@@ -66,6 +53,7 @@ const BudgetPage = () => {
         if (getBalance() >= 0) {
             setState([...movement])
         } else {
+            alert("Expenses cannot be greater than total incomes")
             setState([...JSON.parse(prevState)])
         }    
     }
@@ -81,8 +69,12 @@ const BudgetPage = () => {
             setBalance(getBalance())
             
         } else if (showDialog.form === FORM.EXPENSES) {
-            setExpenses([...expenses, budget])
-            setBalance(getBalance())
+            if (budget.amount > totalAmount(incomes)) {
+                alert("Expenses cannot be greater than total incomes")
+            } else {
+                setExpenses([...expenses, budget])
+                setBalance(getBalance())
+            }
             
         } else if (showDialog.form === FORM.TARGET) {
             setTarget(value.target ?? 0)
@@ -93,6 +85,8 @@ const BudgetPage = () => {
             if (newBalance >= 0) {
                 setBalance(newBalance)
                 setCurrentSaving(currentSaving + transfer)
+            } else {
+                alert("The Balance cannot be negative")
             }
             
         } else if (showDialog.form === FORM.TRANSFER_BALANCE) {
@@ -100,6 +94,8 @@ const BudgetPage = () => {
                 const newsaving = currentSaving - (value.valueTransfer ?? 0)
                 setCurrentSaving(newsaving)
                 setBalance(balance + newsaving)
+            } else {
+                alert("The Balance cannot be negative")
             }
         }
             
@@ -111,7 +107,6 @@ const BudgetPage = () => {
         <React.Fragment>
             
             <div className="budget-container">
-                {/* // Aqui va los incomes y cuando los incomes esten calculados aparece savings al lado en el mismo container */}
                 <BudgetList
                     title="Incomes"
                     budgets={incomes}
@@ -133,7 +128,6 @@ const BudgetPage = () => {
                     </div>
                 </BudgetList>
                 
-                {/* Expenses con su total expense calculado */}
                 <BudgetList
                     title="Expenses"
                     onClick={() => setShowDialog({titleDialog: "Expenses", form: FORM.EXPENSES})}
@@ -150,13 +144,10 @@ const BudgetPage = () => {
                 
                 <Balance
                     balance={getBalance()}
-                    transferFromBalance={() =>
-                        {
-                            setShowDialog({titleDialog: "Transfer to Balance", form: FORM.TRANSFER_BALANCE})
-                        }
-                    }
+                    transferFromBalance={() => setShowDialog({ titleDialog: "Transfer to Balance", form: FORM.TRANSFER_BALANCE }) }
                 />
             </div>
+            
             {(showDialog.form === FORM.INCOMES) || (showDialog.form === FORM.EXPENSES) ? 
                 <Dialog
                     title={showDialog.titleDialog}

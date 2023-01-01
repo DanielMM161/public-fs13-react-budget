@@ -1,8 +1,9 @@
-import React, { FormEventHandler, useState } from 'react'
+import React, { useState } from 'react'
+import { IForm } from '../../interfaces/Form'
 import { IInputsValue } from '../../interfaces/InputsValue'
 import './index.css'
 
-const Transfer = ({ submitForm }: { submitForm: (value: IInputsValue) => void }) => {
+const Transfer = ({ submitForm }: IForm) => {
     
     const [valueTransfer, setValueTransfer] = useState("")
 

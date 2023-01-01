@@ -8,8 +8,7 @@ const BudgetItem = ({
     date,
     deleteItem
 }: IBudget) => {
-    
-    
+        
     return (
         <div className="budget-item">
             <div className="budget-item-amount">

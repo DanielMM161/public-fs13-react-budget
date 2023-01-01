@@ -23,7 +23,7 @@ const Saving = ({
                 <h4>${currentSaving}</h4>
             </div>
             <div className='target'>
-                <h3>Target: {target}</h3>
+                <h3>Target: ${target}</h3>
                 <button className='button' onClick={resetTargetClick}>Reset</button>
             </div>
             <button className='button' onClick={transferClick}>Transfer to saving</button>

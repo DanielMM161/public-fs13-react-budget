@@ -34,7 +34,9 @@
 .budget-item-info {
     width: 50%;
     display: flex;
-    justify-content: space-around;
+    flex-wrap: wrap;
+    justify-content: end;
+    gap: 40px;
 }
 
 .budget-item-info > p {

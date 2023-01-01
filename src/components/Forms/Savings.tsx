@@ -1,8 +1,12 @@
-import React, { FormEventHandler, useState } from 'react'
+import React, { useState } from 'react'
+import { IForm } from '../../interfaces/Form'
 import { IInputsValue } from '../../interfaces/InputsValue'
 import './index.css'
 
-const Savings = ({ label, submitForm}: { label: string, submitForm: (value: IInputsValue) => void }) => {
+const Savings = ({
+    label,
+    submitForm
+}: IForm) => {
     
     const [target, setTarget] = useState("")
 
