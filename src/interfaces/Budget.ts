@@ -1,6 +1,4 @@
-import { IBudgetAction } from "./BudgetAction"
-
-export interface IBudget extends IBudgetAction {
+export interface IBudget {
     date: string
     source: string
     amount: number

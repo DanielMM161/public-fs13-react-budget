@@ -13,8 +13,7 @@ const Balance = ({
     return (
         <div className='balance-container card'>
             <h3>Current Balance</h3>
-            <p>${balance}</p>
-            
+            <p>${balance}</p>            
             <button className="button" onClick={transferFromBalance}>Transfer to Balance</button>
         </div>
     )

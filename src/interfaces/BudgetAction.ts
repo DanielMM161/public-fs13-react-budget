@@ -1,4 +1,4 @@
 export interface IBudgetAction {
-    deleteItem?: (index?: number) => void
+    deleteItem: (index?: number) => void
     onClick?: () => void
 }

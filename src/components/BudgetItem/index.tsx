@@ -1,13 +1,15 @@
 import { IBudget } from "../../interfaces/Budget"
+import { IBudgetAction } from "../../interfaces/BudgetAction"
 import './index.css'
 
+interface IBudgetItem extends IBudget, IBudgetAction {}
 
 const BudgetItem = ({
     amount,
     source,
     date,
     deleteItem
-}: IBudget) => {
+}: IBudgetItem) => {
         
     return (
         <div className="budget-item">
@@ -17,7 +19,7 @@ const BudgetItem = ({
             </div>
             <div className="budget-item-info">
                 <p>{date}</p>
-                <div className="icon-content" onClick={() => { if(deleteItem) deleteItem() }}>
+                <div className="icon-content" onClick={() => { deleteItem() }}>
                     <i className="icon-trash"></i>
                 </div>
             </div>

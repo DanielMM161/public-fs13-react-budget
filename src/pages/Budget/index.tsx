@@ -12,11 +12,6 @@ import { FORM } from "../../utils/constants";
 import Balance from "../../components/Balance";
 import Transfer from "../../components/Forms/Transfer";
 
-export interface IUserBudget {
-    incomes: IBudget[]
-    expenses: IBudget[]
-}
-
 const BudgetPage = () => {
 
     const [incomes, setIncomes] = useState<IBudget[]>([])
@@ -95,7 +90,7 @@ const BudgetPage = () => {
                 setCurrentSaving(newsaving)
                 setBalance(balance + newsaving)
             } else {
-                alert("The Balance cannot be negative")
+                alert("You are trying to spend more money than you have saved")
             }
         }
             

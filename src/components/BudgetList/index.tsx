@@ -29,7 +29,8 @@ const BudgetList = ({
                 
                 <div className="section-list">
                     {
-                        budgets.map((budge, index) => <BudgetItem key={index} {...budge} deleteItem={() => { if(deleteItem) deleteItem(index) }} />)
+                        budgets
+                            .map((budge, index) => <BudgetItem key={index} {...budge} deleteItem={() => { deleteItem(index) }} /> )
                     }
                 </div>
             </div>
